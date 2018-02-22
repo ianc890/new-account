@@ -47,9 +47,13 @@ public class AccountDBRepository {
 	@Transactional(REQUIRED)
 	public String updateAccount(Long id, String accountToUpdate) {
 		Account updatedAccount = util.getObjectForJSON(accountToUpdate, Account.class);
-		Account accountFromDB = findAccount(id);
+		Account accountFromDB = util.getObjectForJSON(findAccount(id), Account.class);
 		if (accountToUpdate != null) {
-			accountFromDB = updatedAccount;
+			//accountFromDB = updatedAccount;
+			//manager.merge(accountFromDB);
+			accountFromDB.setAccountNumber(updatedAccount.getAccountNumber());
+			accountFromDB.setFirstName(updatedAccount.getFirstName());
+			accountFromDB.setSecondName(updatedAccount.getSecondName());
 			manager.merge(accountFromDB);
 		}
 		return "{\"message\": \"account sucessfully updated\"}";
@@ -57,15 +61,16 @@ public class AccountDBRepository {
 
 	@Transactional(REQUIRED)
 	public String deleteAccount(Long id) {
-		Account accountInDB = findAccount(id);
+		Account accountInDB = util.getObjectForJSON(findAccount(id), Account.class);
 		if (accountInDB != null) {
-			manager.remove(accountInDB);
+			manager.remove(manager.contains(accountInDB) ? accountInDB : manager.merge(accountInDB));
 		}
 		return "{\"message\": \"account sucessfully deleted\"}";
 	}
 
-	public Account findAccount(Long id) {
-		return manager.find(Account.class, id);
+	public String findAccount(Long id) {
+		Account findAccount = manager.find(Account.class, id);
+		return util.getJSONForObject(findAccount);
 	}
 
 }
