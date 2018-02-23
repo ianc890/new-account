@@ -11,17 +11,22 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
 
+import com.qa.business.BusinessLogic;
 import com.qa.domain.Account;
+import com.qa.service.ServiceInterface;
 import com.qa.util.JSONUtil;
 
 @Transactional(SUPPORTS)
-public class AccountDBRepository {
+public class AccountDBRepository implements ServiceInterface {
 	
 	@PersistenceContext(unitName = "primary")
 	private EntityManager manager;
 
 	@Inject
 	private JSONUtil util;
+	
+	@Inject
+	private BusinessLogic business;
 
 	public void setManager(EntityManager manager) {
 		this.manager = manager;
@@ -34,8 +39,13 @@ public class AccountDBRepository {
 	@Transactional(REQUIRED)
 	public String createAccount(String account) {
 		Account newAccount = util.getObjectForJSON(account, Account.class);
+		boolean valid = business.blockedAccount(newAccount);
+		if(!valid) {
 		manager.persist(newAccount);
 		return "{\"message\": \"account has been sucessfully added\"}";
+		}
+		
+		return "{\"message\": \"This account is blocked\"}";
 	}
 
 	public String getAllAccounts() {
