@@ -12,8 +12,8 @@ public class App {
 		JSONUtil util = new JSONUtil();
 		Account joeBloggs = new Account("Joe", "Bloggs", "1234");
 		Account janeBloggs = new Account("Jane", "Bloggs", "1234");
-		service.addAccountFromMap(joeBloggs);
-		service.addAccountFromMap(janeBloggs);
+		service.createAccount(util.getJSONForObject(joeBloggs));
+		service.createAccount(util.getJSONForObject(janeBloggs));
 		String mapAsJSON = util.getJSONForObject(service.getAccountMap());
 		System.out.println("This is the account map as JSON " + mapAsJSON);
 

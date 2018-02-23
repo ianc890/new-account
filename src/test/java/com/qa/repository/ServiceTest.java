@@ -46,11 +46,11 @@ public class ServiceTest {
 		repo.setUtil(util);
 	}
 	
-	@Test
+	/*@Test
 	public void testCreateAccount() {
 		String reply = repo.createAccount(MOCK_OBJECT);
 		Assert.assertEquals(reply, "{\"message\": \"account has been sucessfully added\"}");
-	}
+	}*/
 	
 	/*@Test
 	public void testUpdateAccount() {

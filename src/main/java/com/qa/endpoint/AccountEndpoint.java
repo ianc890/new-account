@@ -11,19 +11,22 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.qa.business.BusinessLogic;
 import com.qa.repository.AccountDBRepository;
+import com.qa.service.ServiceInterface;
+import com.qa.util.JSONUtil;
 
 @Path("/account")
 public class AccountEndpoint {
 	
 	@Inject
-	private AccountDBRepository repo;
-	
+	private ServiceInterface service;
+			
 	@GET
 	@Path("/json")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getAllAccounts() {
-		return repo.getAllAccounts();
+		return service.getAllAccounts();
 	}
 	
 	@POST
@@ -31,14 +34,14 @@ public class AccountEndpoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public String createAccount(String account) {
-		return repo.createAccount(account);
+		return service.createAccount(account);
 	}
 	
 	@GET
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String findAccount(@PathParam("id") Long id) {
-		return repo.findAccount(id);
+		return service.findAccount(id);
 	}
 	
 	@PUT
@@ -46,14 +49,14 @@ public class AccountEndpoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public String updateAccount(@PathParam("id") Long id, String account) {
-		return repo.updateAccount(id, account);
+		return service.updateAccount(id, account);
 	}
 	
 	@DELETE
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String deleteAccount(@PathParam("id") Long id) {
-		return repo.deleteAccount(id);
+		return service.deleteAccount(id);
 	}
 
 }
